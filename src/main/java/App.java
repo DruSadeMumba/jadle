@@ -15,20 +15,32 @@ import java.util.Map;
 import static spark.Spark.*;
 
 public class App {
+    /*static int getHerokuAssignedPort() {
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        if (processBuilder.environment().get("PORT") != null) {
+            return Integer.parseInt(processBuilder.environment().get("PORT"));
+        }
+        return 4567;
+    }*/
     public static void main(String[] args) {
+        /*port(getHerokuAssignedPort());
+        staticFileLocation("/public");*/
+
         SqlFoodtypeDao foodtypeDao;
         SqlRestaurantDao restaurantDao;
         SqlReviewDao reviewDao;
         Connection conn;
         Gson gson = new Gson();
 
-        String connectionString = "jdbc:jdbc:postgresql://localhost:5432/jadle";
-        Sql2o sql2o = new Sql2o(connectionString, "", "");
+        String connectionString = "jdbc:postgresql://localhost:5432/jadle";
+        Sql2o sql2o = new Sql2o(connectionString, null, null);
 
         restaurantDao = new SqlRestaurantDao(sql2o);
         foodtypeDao = new SqlFoodtypeDao(sql2o);
         reviewDao = new SqlReviewDao(sql2o);
         conn = sql2o.open();
+
+        Map<String, Object> model = new HashMap<>();
 
                                     /*RESTAURANTS*/
         get("/restaurants", "application/json", (req, res) -> {//1.0 view all restaurants
